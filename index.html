@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>音樂壁紙提示詞編輯器</title>
+<style>
+  :root { color-scheme: dark; --bg:#101311; --panel:#1a201c; --panel2:#222a25; --text:#f3f6f3; --muted:#a9b4ac; --green:#fa4561; --line:#354139; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:radial-gradient(ellipse at top,#26362b 0,#101311 55%); color:var(--text); font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+  .wrap { width:min(960px,100%); margin:auto; padding:28px 18px 50px; }
+  header { margin-bottom:24px; }
+  .eyebrow { color:var(--green); font-weight:750; letter-spacing:.12em; font-size:.76rem; text-transform:uppercase; }
+  h1 { margin:.35rem 0 .5rem; font-size:clamp(1.8rem,5vw,2.7rem); line-height:1.12; }
+  .sub { color:var(--muted); max-width:700px; }
+  .layout { display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start; }
+  .panel { background:rgba(26,32,28,.94); border:1px solid var(--line); border-radius:18px; padding:20px; box-shadow:0 16px 45px #0002; }
+  h2 { margin:0 0 16px; font-size:1.1rem; }
+  label { display:block; color:#dfe7e1; font-weight:650; font-size:.9rem; margin:13px 0 6px; }
+  input[type=text], select, textarea { width:100%; border:1px solid #46534a; background:#111713; color:var(--text); border-radius:10px; padding:11px 12px; font:inherit; outline:none; }
+  input:focus, select:focus, textarea:focus { border-color:var(--green); box-shadow:0 0 0 3px #fa456120; }
+  textarea { min-height:340px; resize:vertical; line-height:1.55; font-size:.91rem; }
+  .check { display:flex; gap:10px; align-items:flex-start; margin:16px 0 8px; font-weight:500; color:#dce4de; }
+  .check input { margin-top:5px; accent-color:var(--green); width:17px; height:17px; flex:none; }
+  .hint { color:var(--muted); font-size:.83rem; margin-top:7px; }
+  .buttons { display:flex; flex-wrap:wrap; gap:10px; margin-top:15px; }
+  button { border:0; border-radius:999px; padding:11px 16px; font-family:inherit; font-weight:700; font-size:.92rem; cursor:pointer; }
+  .primary { background:var(--green); color:#fff; }
+  .secondary { background:#303a33; color:var(--text); border:1px solid #46534a; }
+  button:hover { filter:brightness(1.08); }
+  .status { min-height:1.4em; color:var(--green); font-size:.85rem; margin-top:8px; }
+  footer { color:var(--muted); font-size:.82rem; margin-top:18px; }
+  @media(max-width:720px) { .layout { grid-template-columns:1fr; } .panel { padding:16px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Creative prompt builder</div>
+    <h1><span id="platformTitle">Apple Music</span> 音樂壁紙<br>提示詞編輯器</h1>
+    <div class="sub">填入歌曲、選擇比例及風格，右邊會自動整理成完整提示詞。你可以直接修改文字、複製提示詞，再連同原相片交給 ChatGPT 生成圖片。</div>
+  </header>
+
+  <div class="layout">
+    <section class="panel">
+      <h2>① 自訂圖片設定</h2>
+      <label for="platform">音樂平台</label>
+      <select id="platform">
+        <option value="apple">Apple Music</option>
+        <option value="spotify">Spotify</option>
+      </select>
+      <label for="song">歌曲名稱</label>
+      <input id="song" type="text" value="轉眼" placeholder="例如：轉眼">
+      <label for="artist">歌手名稱</label>
+      <input id="artist" type="text" value="五月天" placeholder="例如：五月天">
+      <label for="ratio">圖片比例</label>
+      <select id="ratio">
+        <option value="9:16">9:16 — iPhone 壁紙／Instagram Story</option>
+        <option value="3:4">3:4 — 直向相片</option>
+        <option value="1:1">1:1 — 正方形封面</option>
+        <option value="4:5">4:5 — 社交平台直向貼文</option>
+        <option value="2:3">2:3 — 經典相片直向</option>
+        <option value="9:19.5">9:19.5 — 新款 iPhone 全螢幕</option>
+        <option value="16:9">16:9 — 橫向（電腦／平板壁紙）</option>
+      </select>
+      <label for="style">攝影風格</label>
+      <select id="style">
+        <option value="電影感夕陽">電影感夕陽</option>
+        <option value="清新自然日光">清新自然日光</option>
+        <option value="深色夜景氛圍">深色夜景氛圍</option>
+        <option value="復古菲林">復古菲林</option>
+        <option value="柔和陰天、低飽和色調">柔和陰天、低飽和色調</option>
+        <option value="黃金時刻逆光">黃金時刻逆光</option>
+        <option value="藍調時刻、冷色調">藍調時刻、冷色調</option>
+        <option value="日系清新、高明亮度">日系清新、高明亮度</option>
+        <option value="黑白電影感">黑白電影感</option>
+        <option value="霓虹夜景、城市燈光">霓虹夜景、城市燈光</option>
+      </select>
+      <label for="language">介面文字</label>
+      <select id="language">
+        <option value="繁體中文">繁體中文</option>
+        <option value="英文">英文</option>
+        <option value="歌曲資料使用原文，其餘介面使用繁體中文">歌曲資料使用原文，其餘介面使用繁體中文</option>
+      </select>
+      <label for="uiColor">介面文字顏色</label>
+      <select id="uiColor">
+        <option value="白色">白色</option>
+        <option value="深色（適合明亮背景）">深色（適合明亮背景）</option>
+        <option value="按背景亮度自動選擇最清晰的顏色">自動選擇最清晰的顏色</option>
+      </select>
+      <label for="layout">介面位置</label>
+      <select id="layout">
+        <option value="介面放在畫面下方，人物保持在上方及中央">介面放在下方</option>
+        <option value="介面放在畫面上方，人物保持在中下方">介面放在上方</option>
+        <option value="介面置中偏下，並以柔和漸變遮罩承托文字">置中偏下（漸變承托）</option>
+      </select>
+      <label for="bg">背景處理</label>
+      <select id="bg">
+        <option value="保留原相背景，只作自然調色">保留原背景</option>
+        <option value="背景輕微模糊，突出人物及介面">背景輕微模糊</option>
+        <option value="加入柔和暗角及漸變遮罩，提升文字可讀性">暗角＋漸變遮罩</option>
+      </select>
+      <label for="accent" id="accentLabel">點綴色</label>
+      <select id="accent"></select>
+      <label for="progress">播放時間（可選）</label>
+      <input id="progress" type="text" value="使用示意時間，例如 1:42 / 4:39" placeholder="例如：1:42 / 4:39">
+      <label class="check"><input id="keepAccessories" type="checkbox" checked><span>必須保留原相所有配件，包括太陽眼鏡、帽、耳機等</span></label>
+      <label class="check"><input id="extend" type="checkbox" checked><span>需要改比例時，優先自然延伸背景，避免裁走人物</span></label>
+      <label class="check"><input id="album" type="checkbox" checked><span>專輯縮圖盡量配合歌曲；未確認官方封面時使用原創縮圖</span></label>
+      <label class="check"><input id="statusBar" type="checkbox"><span>加入手機狀態列（時間、電量、訊號）</span></label>
+      <label class="check"><input id="lockTime" type="checkbox"><span>加入鎖定畫面大型時間及日期</span></label>
+      <label class="check"><input id="noWatermark" type="checkbox" checked><span>不加入水印、簽名或額外標題</span></label>
+      <label class="check"><input id="sharp" type="checkbox"><span>保持高清細節，避免過度柔化及濾鏡感</span></label>
+      <label for="extra">額外要求（可選）</label>
+      <input id="extra" type="text" placeholder="例如：人物靠左、介面放下方、不要改變面部">
+      <div class="buttons">
+        <button class="primary" id="updateBtn">更新提示詞</button>
+        <button class="secondary" id="resetBtn" type="button">還原預設</button>
+      </div>
+      <div class="hint">提示：先在 ChatGPT 上傳原相，再複製右側提示詞並傳送。</div>
+    </section>
+
+    <section class="panel">
+      <h2>② 可直接修改的完整提示詞</h2>
+      <textarea id="prompt" spellcheck="false"></textarea>
+      <div class="buttons">
+        <button class="primary" id="copyBtn">複製提示詞</button>
+        <button class="secondary" id="openBtn">複製並開啟 ChatGPT</button>
+        <button class="secondary" id="downloadBtn">下載 .txt</button>
+      </div>
+      <div class="status" id="status" aria-live="polite"></div>
+    </section>
+  </div>
+  <footer>這是一個本機 HTML 編輯器，不會自動生成圖片或連接 Apple Music／Spotify。複製提示詞後，請在支援圖片生成的聊天中連同相片一起使用。</footer>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+const PLATFORMS = {
+  apple: {
+    name: 'Apple Music', file: 'AppleMusic', accentName: 'Apple Music 紅色點綴',
+    accent: [
+      ['只用於小面積元素（如按鈕及選單圖示）', '只用於小面積元素'],
+      ['完全不使用紅色，介面保持單色白／灰', '不使用紅色'],
+      ['可略為增加紅色／粉紅色元素，並與畫面色調協調', '稍多紅色元素']
+    ],
+    accentWord: 'Apple Music 紅色點綴',
+    ui: (song, artist, progress) => `將畫面設計成 Apple Music 風格（iOS）的「正在播放」音樂播放畫面，並自然融入相片。
+介面包括：
+- 歌曲專輯縮圖（圓角方形，帶柔和陰影）。
+- 歌曲名稱：${song}
+- 歌手名稱：${artist}
+- 名稱旁邊的星號（收藏）及三點選單圖示。
+- 細長的播放進度條，左右兩端顯示已播放時間及剩餘時間：${progress}
+- 上一首、暫停、下一首圖示。
+- 音量滑桿。
+- 最底部一排三個圖示：左邊為歌詞（引號圖示）、中間為 AirPlay、右邊為播放列表（Playing Next）。
+- 不要在主畫面加入隨機播放及循環播放按鈕（它們在播放列表選單內）。`,
+    font: '（SF Pro 風格），配合半透明毛玻璃（frosted glass）質感'
+  },
+  spotify: {
+    name: 'Spotify', file: 'Spotify', accentName: 'Spotify 綠色點綴',
+    accent: [
+      ['只用於愛心及進度條等小面積元素', '只用於小面積元素'],
+      ['完全不使用綠色，介面保持單色白／灰', '不使用綠色'],
+      ['可略為增加綠色元素，並與畫面色調協調', '稍多綠色元素']
+    ],
+    accentWord: 'Spotify 綠色點綴',
+    ui: (song, artist, progress) => `將畫面設計成 Spotify 風格的「Now Playing」音樂播放畫面，並自然融入相片。
+介面包括：
+- Spotify 標誌，放在畫面上方。
+- 右上角三點選單圖示。
+- 歌曲專輯縮圖。
+- 歌曲名稱：${song}
+- 歌手名稱：${artist}
+- 綠色已收藏愛心。
+- 音樂播放進度條及播放時間：${progress}
+- 隨機播放、上一首、暫停、下一首及循環播放圖示。`,
+    font: '，配合適度透明效果'
+  }
+};
+function platform() { return PLATFORMS[$('platform').value]; }
+function fillAccent() {
+  const p = platform(), cur = $('accent').selectedIndex;
+  $('accent').innerHTML = p.accent.map(a => '<option value="' + a[0] + '">' + a[1] + '</option>').join('');
+  $('accent').selectedIndex = Math.max(cur, 0);
+  $('accentLabel').textContent = p.accentName;
+  $('platformTitle').textContent = p.name;
+}
+function buildPrompt() {
+  const P = platform();
+  const song = $('song').value.trim() || '請按我指定的歌曲';
+  const artist = $('artist').value.trim() || '請按我指定的歌手';
+  const ratio = $('ratio').value;
+  const style = $('style').value;
+  const language = $('language').value;
+  const progress = $('progress').value.trim() || '使用合理的示意數值，不要聲稱是官方實際播放進度';
+  const accessories = $('keepAccessories').checked
+    ? '如果原相有太陽眼鏡、帽、耳機或其他配件，必須保留，不能擅自刪除。'
+    : '盡量保留原相人物的配件與細節。';
+  const extend = $('extend').checked
+    ? '如果需要改變比例，優先自然延伸背景，不要裁走人物或重要內容。'
+    : '調整構圖時仍需避免不必要地裁走人物或重要內容。';
+  const album = $('album').checked
+    ? '專輯縮圖盡量符合歌曲的實際視覺風格；如未能確認官方封面，使用協調的原創縮圖，不要冒充官方封面。'
+    : '使用與歌曲氣氛協調的專輯縮圖。';
+  const uiColor = $('uiColor').value, layout = $('layout').value, bg = $('bg').value, accent = $('accent').value;
+  const optional = [];
+  if ($('statusBar').checked) optional.push('- 畫面頂部加入真實感的手機狀態列（時間、訊號、電量），不要遮擋人物面部。');
+  if ($('lockTime').checked) optional.push(`- 加入鎖定畫面風格的大型時間及日期，位置不要與 ${P.name} 介面或人物面部重疊。`);
+  if ($('sharp').checked) optional.push('- 保持高清細節與自然質感，避免過度柔化、磨皮或濾鏡感。');
+  const optionalText = optional.length ? '\n' + optional.join('\n') : '';
+  const watermark = $('noWatermark').checked ? '- 不要加入額外標題、水印、簽名、無關文字或其他品牌標誌。' : `- 除 ${P.name} 介面外，盡量避免加入無關文字或其他品牌標誌。`;
+  const extra = $('extra').value.trim();
+  return `請將我上傳的相片，製作成一張高質素、寫實、電影感的 ${P.name} 音樂播放介面風格手機壁紙。
+
+一、人物及原相保留
+- 以我上傳的相片作為主要視覺參考。
+- 盡量保留原相人物的身份特徵、面部、髮型、姿勢、身形比例、服裝、配件及原本動作。
+- ${accessories}
+- 保留原相的主要環境、場景及具有辨識度的細節。
+- 不要隨意改變人物身份、衣服、姿勢或主要物件。
+- ${extend}
+
+二、整體攝影風格
+- 採用高質素、寫實、電影感的攝影風格。
+- 根據原相場景自然調整光線、色彩、陰影、對比度及環境細節。
+- 整體風格：${style}。
+- 如果是海灘場景，可使用溫暖夕陽、金色反光、藍綠色海水、柔和橙粉色天空及自然沙灘紋理。
+- 保持自然、有故事感的氣氛，避免過度飽和、過度磨皮或不自然的 AI 質感。
+
+三、${P.name} 音樂播放介面
+${P.ui(song, artist, progress)}
+使用簡潔、清晰、精緻的${uiColor}字體及圖示${P.font}。
+- 版面：${layout}。
+- 背景：${bg}。
+- ${P.accentWord}：${accent}。
+介面不應過度遮擋人物面部或畫面的重要部分。
+
+四、歌曲及文字
+- 歌曲名稱及歌手名稱必須準確。
+- 文字語言要求：${language}。如使用中文，必須使用正確的繁體中文，不要混入簡體字。
+- ${album}
+- 避免亂碼、錯字、重複文字及錯誤的播放圖示。
+- 播放時間只作視覺示意，除非我有提供經核實的實際資料，否則不要聲稱為官方播放進度。
+
+五、尺寸及構圖
+- 畫面比例：${ratio} 直向。
+- 適合手機壁紙及社交平台直向畫面。
+- 保持人物完整、構圖平衡，為歌曲資訊及播放控制預留清晰空間。
+- 文字、標誌及控制圖示必須清楚可讀。
+${watermark}${optionalText}
+
+六、最重要的要求
+優先保留原相人物及配件，再處理色調、背景延伸、版面及 ${P.name} 介面。不要為了美化而擅自改變人物。
+${extra ? '\n額外要求：' + extra : ''}
+請直接生成完成的圖片，不需要先提供設計方案或解釋。`;
+}
+function updatePrompt() { $('prompt').value = buildPrompt(); $('status').textContent = '提示詞已更新。你亦可以直接在文字框內修改。'; }
+$('updateBtn').addEventListener('click', updatePrompt);
+['platform','song','artist','ratio','style','language','progress','keepAccessories','extend','album','extra','uiColor','layout','bg','accent','statusBar','lockTime','noWatermark','sharp'].forEach(id => {
+  $(id).addEventListener('input', () => { $('prompt').value = buildPrompt(); });
+  $(id).addEventListener('change', () => { if (id === 'platform') fillAccent(); $('prompt').value = buildPrompt(); });
+});
+$('copyBtn').addEventListener('click', async () => {
+  try { await navigator.clipboard.writeText($('prompt').value); $('status').textContent = '已複製提示詞，可以貼到 ChatGPT 使用。'; }
+  catch(e) { $('prompt').focus(); $('prompt').select(); $('status').textContent = '瀏覽器未能自動複製，已選取文字，請手動複製。'; }
+});
+$('openBtn').addEventListener('click', async () => {
+  try { await navigator.clipboard.writeText($('prompt').value); $('status').textContent = '已複製提示詞，正在開啟 ChatGPT，請上傳原相後貼上。'; }
+  catch(e) { $('status').textContent = '未能自動複製，請先按「複製提示詞」。'; }
+  window.open('https://chatgpt.com/', '_blank', 'noopener');
+});
+$('downloadBtn').addEventListener('click', () => {
+  const blob = new Blob([$('prompt').value], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob); const a = document.createElement('a');
+  a.href = url; a.download = platform().file + '-音樂壁紙提示詞.txt'; a.click(); URL.revokeObjectURL(url);
+  $('status').textContent = '已準備下載提示詞文字檔。';
+});
+$('resetBtn').addEventListener('click', () => {
+  $('platform').value = 'apple'; fillAccent(); $('song').value = '轉眼'; $('artist').value = '五月天'; $('ratio').value = '9:16';
+  $('style').value = '電影感夕陽'; $('language').value = '繁體中文';
+  $('progress').value = '使用示意時間，例如 1:42 / 4:39';
+  $('keepAccessories').checked = true; $('extend').checked = true; $('album').checked = true; $('extra').value = '';
+  $('uiColor').selectedIndex = 0; $('layout').selectedIndex = 0; $('bg').selectedIndex = 0; $('accent').selectedIndex = 0;
+  $('statusBar').checked = false; $('lockTime').checked = false; $('noWatermark').checked = true; $('sharp').checked = false;
+  updatePrompt(); $('status').textContent = '已還原預設設定。';
+});
+fillAccent();
+updatePrompt();
+</script>
+</body>
+</html>
