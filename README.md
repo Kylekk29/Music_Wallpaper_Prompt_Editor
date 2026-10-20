@@ -1,3 +1,5 @@
+**English** | [简体中文](README.zh-CN.md)
+
 # Music Wallpaper Prompt Editor
 
 A single-file, offline HTML tool that builds a detailed image-generation prompt for turning
